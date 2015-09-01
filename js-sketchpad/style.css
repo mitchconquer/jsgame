@@ -1,0 +1,60 @@
+h3 {
+    font-family: sans-serif;
+    font-weight: 200;
+    text-align: center;
+    width: 50%;
+    min-width: 300px;
+    display: block;
+    margin: 10px auto;
+}
+
+body {
+	text-align: center;
+}
+
+/* Button */
+
+#clear {
+	font-family: sans-serif;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 200;
+	text-decoration: none;
+	padding: 10px 50px;
+	background-color: salmon;
+	border-radius: 10px;
+	margin: 10px;	
+	display: inline-block;
+	border: 2px solid white;
+}
+
+#clear:hover {
+	background-color: #fff;
+	color: salmon;
+	border: 2px solid salmon;
+}
+
+/* Grid */
+#grid {
+	max-width: 800px;
+	width: 100%;
+	display: block;
+	margin: 10px auto;
+	font-size: 0;
+}
+
+/* Pixels */
+
+.pixel {
+	margin: 1px;
+	display: inline-block;
+	background-color: cadetblue;
+	display: flex;
+	float:left;
+	/*-webkit-transition: background-color .15s;
+    transition: background-color .15s;*/
+}
+
+.active {
+	background-color: salmon;
+}
