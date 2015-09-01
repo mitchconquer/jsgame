@@ -36,7 +36,7 @@ body {
 
 /* Grid */
 #grid {
-	max-width: 800px;
+	max-width: 600px;
 	width: 100%;
 	display: block;
 	margin: 10px auto;
