@@ -87,9 +87,11 @@ function toggleDestruction(destruction) {
 	if (destruction === false) {
 		destruction = true;
 		$('#destruction').addClass('activated');
+		$('#destruction').html('Less Destruction Plz!');
 	} else {
 		destruction = false;
 		$('#destruction').removeClass('activated');
+		$('#destruction').html('MOAR Destruction!');
 	}
 	return destruction;
 }
@@ -171,8 +173,10 @@ function animationClass(self) {
 function animatePixel(self) {
 	animationClass(self);
 	$this = self;
-	var top = Math.floor(Math.random() * (100)) + 50;
-	var left = Math.floor(Math.random() * (100)) + 50;
+	var top = Math.floor(Math.random() * 120);
+	var left = Math.floor(Math.random() * 120);
+	if (Math.random() > 0.5) top = top * (-1);
+	if (Math.random() > 0.5) left = left * (-1);
 	$this.css('left', left);
 	$this.css('top', top);
 }
