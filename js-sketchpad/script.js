@@ -12,16 +12,23 @@ NOTES:
 
 $(document).ready(function(){
 	var pixels = 16; // initial pixel density
+	var destruction = false; // Destruction mode off by default
 	initializeGrid(pixels);
 
 	$(document).on('mouseenter', '.pixel', function(){
 		changeColor($(this));
+		if (destruction === true) animatePixel($(this));
 	});
 
 	$('#clear').click(function(e){
 		e.preventDefault();
 		pixels = promptPixels();
 		initializeGrid(pixels);
+	});
+
+	$('#destruction').click(function(e){
+		e.preventDefault();
+		destruction = toggleDestruction(destruction);
 	});
 
 });
@@ -74,6 +81,17 @@ function clearGrid(){
 function promptPixels(){
 	pixels = parseInt(prompt('How many pixels ya want? (You can have any amount, between 1 and 100!)', 16));
 	return pixels;
+}
+
+function toggleDestruction(destruction) {
+	if (destruction === false) {
+		destruction = true;
+		$('#destruction').addClass('activated');
+	} else {
+		destruction = false;
+		$('#destruction').removeClass('activated');
+	}
+	return destruction;
 }
 
 function changeColor(self){
@@ -144,5 +162,17 @@ function activatePixel(self){
 	}
 }
 
+function animationClass(self) {
+	$this = self;
+	$this.css('left', 0);
+	$this.css('top', 0);
+}
 
-
+function animatePixel(self) {
+	animationClass(self);
+	$this = self;
+	var top = Math.floor(Math.random() * (100)) + 50;
+	var left = Math.floor(Math.random() * (100)) + 50;
+	$this.css('left', left);
+	$this.css('top', top);
+}
