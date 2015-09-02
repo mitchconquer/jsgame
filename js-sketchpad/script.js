@@ -173,8 +173,8 @@ function animationClass(self) {
 function animatePixel(self) {
 	animationClass(self);
 	$this = self;
-	var top = Math.floor(Math.random() * 120);
-	var left = Math.floor(Math.random() * 120);
+	var top = Math.floor(Math.random() * 500);
+	var left = Math.floor(Math.random() * 500);
 	if (Math.random() > 0.5) top = top * (-1);
 	if (Math.random() > 0.5) left = left * (-1);
 	$this.css('left', left);
