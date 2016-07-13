@@ -1,0 +1,9 @@
+#wrapper {
+  text-align: center;
+}
+
+#container {
+  width: 80%;
+  display: inline-block;
+  min-width: 300px;
+}
