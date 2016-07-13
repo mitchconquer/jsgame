@@ -54,13 +54,13 @@ Game.prototype.gameLoop = function() {
 };
 
 Game.prototype.setupRound = function(levelNumber) {
+  this.upperGap = this.randGap();
+  this.lowerGap = upperGap - this.randLedge();
+  this.roundIsSetup = true;
   const level = LevelConstants.get(levelNumber),
         block = new Block((this.width / 2)),
-        this.upperGap = this.randGap(),
         upperWall = new UpperWall(this.upperGap, this.width),
-        this.lowerGap = upperGap - this.randLedge();
-        upperWall = new UpperWall(this.lowerGap, this.width),
-        this.roundIsSetup = true;
+        lowerWall = new LowerWall(this.lowerGap, this.width);
 };
 
 Game.prototype.startGrowing = function(block) {
