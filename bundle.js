@@ -46,49 +46,11 @@
 
 	'use strict';
 	
-	var Game = __webpack_require__(1);
+	var Game = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./game\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	$(function () {
 	  var game = new Game();
 	});
-
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Canvas = __webpack_require__(2);
-	
-	function Game() {
-	  var canvas = new Canvas();
-	  canvas.init();
-	}
-	
-	module.exports = Game;
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	function Canvas() {
-	  this.canvas = document.getElementById('canvas');
-	  this.ctx = canvas.getContext('2d');
-	  this.container = document.getElementById('container');
-	}
-	
-	Canvas.prototype.init = function () {
-	  this.resizeCanvas();
-	  window.addEventListener('resize', this.resizeCanvas);
-	};
-	
-	Canvas.prototype.resizeCanvas = function (e) {
-	  $(this.canvas).attr('width', $(this.container).width());
-	};
-	
-	module.exports = Canvas;
 
 /***/ }
 /******/ ]);
