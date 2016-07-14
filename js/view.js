@@ -42,7 +42,8 @@ View.prototype.render = function() {
   if (this.game.block) {
     const block = this.game.block;
     ctx.fillStyle = "whitesmoke";
-    ctx.fillRect(block.x, block.y, block.size, block.size);
+    ctx.fillRect(block.x(), block.y, block.size, block.size);
+    console.log(block.x());
   }
 };
 

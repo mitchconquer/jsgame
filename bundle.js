@@ -54,6 +54,7 @@
 	  var canvas = new Canvas();
 	  var game = new Game(canvas.canvas.offsetWidth);
 	  var view = new View(game, canvas);
+	  window.view = view;
 	});
 	
 	window.Game = Game;
@@ -214,24 +215,18 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	function Block(canvasWidth) {
+	  var _this = this;
+	
 	  this.size = 25;
 	  this.sizeIncrement = 500;
-	  this.x = canvasWidth / 2 - this.size / 2;
-	  this.y = 200;
-	  console.log('Block.canvasWidth = ' + canvasWidth);
+	  this.x = function () {
+	    return canvasWidth / 2 - _this.size / 2;
+	  };
+	  this.y = 70;
 	}
-	
-	// Block.prototype.startGrowing = function() {
-	//   this.growing = true;
-	//   this.grow();
-	// };
-	
-	// Block.prototype.stopGrowing = function() {
-	//   this.growing = false;
-	// };
 	
 	Block.prototype.grow = function (modifier) {
 	  this.size += this.sizeIncrement * modifier;
@@ -321,7 +316,8 @@
 	  if (this.game.block) {
 	    var block = this.game.block;
 	    ctx.fillStyle = "whitesmoke";
-	    ctx.fillRect(block.x, block.y, block.size, block.size);
+	    ctx.fillRect(block.x(), block.y, block.size, block.size);
+	    console.log(block.x());
 	  }
 	};
 	

@@ -6,6 +6,7 @@ $(() => {
   const canvas = new Canvas();
   const game = new Game(canvas.canvas.offsetWidth);
   const view = new View(game, canvas);
+  window.view = view;
 });
 
 window.Game = Game;
