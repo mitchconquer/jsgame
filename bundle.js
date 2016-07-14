@@ -315,6 +315,7 @@
 	  ctx.fillStyle = this.backgroundColor;
 	  ctx.fillRect(0, 0, this.canvas.canvas.offsetWidth, this.canvas.canvas.offsetHeight);
 	
+	  // Block
 	  if (this.game.block) {
 	    var block = this.game.block;
 	    ctx.fillStyle = "whitesmoke";

@@ -41,6 +41,7 @@ View.prototype.render = function() {
   ctx.fillStyle = this.backgroundColor;
   ctx.fillRect(0, 0, this.canvas.canvas.offsetWidth, this.canvas.canvas.offsetHeight);
 
+  // Block
   if (this.game.block) {
     const block = this.game.block;
     ctx.fillStyle = "whitesmoke";
