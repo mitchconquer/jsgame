@@ -60,6 +60,7 @@ View.prototype.update = function(modifier) {
     // Drop that block
     this.dropBlock(modifier);
   }
+
 };
 
 View.prototype.render = function() {
@@ -70,6 +71,7 @@ View.prototype.render = function() {
   ctx.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
 
   this.renderBlock();
+  this.renderWalls();
 };
 
 /* RENDER HELPERS */
@@ -104,6 +106,30 @@ View.prototype.renderBlock = function() {
       this.ctx.restore();
     }
   }
+};
+
+View.prototype.renderWalls = function() {
+  /* LEFT SIDE */
+  this.ctx.beginPath();
+  this.ctx.rect( 0,  ( this.canvas.offsetHeight - 50 ), ( ( this.canvas.width / 2 ) - ( this.lowerGap / 2 ) ), ( this.canvas.offsetHeight - 50 ) );
+  this.ctx.fillStyle = "whitesmoke";
+  this.ctx.fill();
+
+  this.ctx.beginPath();
+  this.ctx.rect( 0,  ( this.canvas.offsetHeight - 80 ), ( ( this.canvas.width / 2 ) - ( this.upperGap / 2 ) ), ( this.canvas.offsetHeight - 80 ) );
+  this.ctx.fillStyle = "whitesmoke";
+  this.ctx.fill();
+
+  /* RIGHT SIDE */
+  this.ctx.beginPath();
+  this.ctx.rect( ( ( this.canvas.width / 2 ) + ( this.lowerGap / 2 ) ),  ( this.canvas.offsetHeight - 50 ), ( ( this.canvas.width / 2 ) - ( this.lowerGap / 2 ) ), ( this.canvas.offsetHeight - 50 ) );
+  this.ctx.fillStyle = "whitesmoke";
+  this.ctx.fill();
+
+  this.ctx.beginPath();
+  this.ctx.rect( ( ( this.canvas.width / 2 ) + ( this.upperGap / 2 ) ),  ( this.canvas.offsetHeight - 80 ), ( ( this.canvas.width / 2 ) - ( this.upperGap / 2 ) ), ( this.canvas.offsetHeight - 80 ) );
+  this.ctx.fillStyle = "whitesmoke";
+  this.ctx.fill();
 };
 
 /* ANIMATION METHODS */
@@ -156,6 +182,8 @@ View.prototype.setInitialState = function() {
   this.droppingBlock = false;
   this.backgroundColor = this.randomBackground();
   this.block = this.game.block;
+  this.lowerGap = this.game.lowerGap;
+  this.upperGap = this.game.upperGap;
   // Delay and rewind up block
 };
 
