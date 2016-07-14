@@ -274,6 +274,8 @@
 	  this.canvas = canvas;
 	  this.game = game;
 	  this.mouseDown = false;
+	  this.backgroundColors = ['#3D504C', '#C63020', '#202332'];
+	  this.backgroundColor = this.randomBackground();
 	
 	  this.game.setWidth(this.canvas.width);
 	
@@ -310,15 +312,19 @@
 	  var ctx = this.canvas.ctx;
 	
 	  //  Background
-	  ctx.fillStyle = "#3D504C";
+	  ctx.fillStyle = this.backgroundColor;
 	  ctx.fillRect(0, 0, this.canvas.canvas.offsetWidth, this.canvas.canvas.offsetHeight);
 	
 	  if (this.game.block) {
 	    var block = this.game.block;
 	    ctx.fillStyle = "whitesmoke";
 	    ctx.fillRect(block.x(), block.y, block.size, block.size);
-	    console.log(block.x());
 	  }
+	};
+	
+	/* UTILITY METHODS */
+	View.prototype.randomBackground = function () {
+	  return this.backgroundColors[Math.floor(Math.random(this.backgroundColors.length) * this.backgroundColors.length)];
 	};
 	
 	module.exports = View;
