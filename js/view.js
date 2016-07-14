@@ -73,14 +73,14 @@ View.prototype.render = function() {
 /* RENDER HELPERS */
 
 View.prototype.renderBlock = function() {
-  if (this.game.block) {
-    if (this.block.rotation > 0) {
+  if ( this.game.block ) {
+    if ( this.block.rotation > 0 ) {
       this.ctx.save();
 
       this.ctx.beginPath();
-      this.ctx.translate((this.block.x() + (this.block.size/2)), (this.block.y() + (this.block.size / 2)));
-      this.ctx.rotate((45 - this.block.rotation) * Math.PI / 180);
-      this.ctx.rect(((this.block.size/2)*-1), 0, this.block.size, this.block.size);
+      this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
+      this.ctx.rotate( ( 45 - this.block.rotation) * Math.PI / 180);
+      this.ctx.rect( ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
 
@@ -89,9 +89,9 @@ View.prototype.renderBlock = function() {
       this.ctx.save();
 
       this.ctx.beginPath();
-      this.ctx.translate((this.block.x() + (this.block.size/2)), (this.block.y() + (this.block.size / 2)));
-      this.ctx.rotate(45 * Math.PI / 180);
-      this.ctx.rect(((this.block.size/2)*-1), -0, this.block.size, this.block.size);
+      this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
+      this.ctx.rotate( 45 * Math.PI / 180 );
+      this.ctx.rect(  ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
 

@@ -47,7 +47,7 @@
 	'use strict';
 	
 	var Game = __webpack_require__(1),
-	    Canvas = __webpack_require__(2),
+	    Canvas = __webpack_require__(6),
 	    View = __webpack_require__(7);
 	
 	$(function () {
@@ -66,10 +66,10 @@
 
 	'use strict';
 	
-	var LevelConstants = __webpack_require__(3),
-	    Block = __webpack_require__(4),
-	    UpperWall = __webpack_require__(5),
-	    LowerWall = __webpack_require__(6);
+	var LevelConstants = __webpack_require__(2),
+	    Block = __webpack_require__(3),
+	    UpperWall = __webpack_require__(4),
+	    LowerWall = __webpack_require__(5);
 	
 	function Game() {
 	  var width = arguments.length <= 0 || arguments[0] === undefined ? 300 : arguments[0];
@@ -174,6 +174,75 @@
 /* 2 */
 /***/ function(module, exports) {
 
+	"use strict";
+	
+	var Level = new Map();
+	
+	var levelOne = {
+	  level: 1,
+	  ledgeRange: [15, 50]
+	};
+	
+	Level.set(1, levelOne);
+	
+	module.exports = Level;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	function Block(canvasWidth) {
+	  var _this = this;
+	
+	  this.size = 25;
+	  this.sizeIncrement = 300;
+	  this.x = function () {
+	    return canvasWidth / 2 - _this.size / 2;
+	  };
+	  this.y = function () {
+	    return 70 - _this.size / 2;
+	  };
+	  this.rotation = 0;
+	}
+	
+	Block.prototype.grow = function (modifier) {
+	  this.size += this.sizeIncrement * modifier;
+	};
+	
+	module.exports = Block;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	function UpperWall(gap, screenWidth) {
+	  this.gap = gap;
+	  this.screenWidth = screenWidth;
+	}
+	
+	module.exports = UpperWall;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	function LowerWall(gap, screenWidth) {
+	  this.gap = gap;
+	  this.screenWidth = screenWidth;
+	}
+	
+	module.exports = LowerWall;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
 	'use strict';
 	
 	function Canvas() {
@@ -195,81 +264,12 @@
 	module.exports = Canvas;
 
 /***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	var Level = new Map();
-	
-	var levelOne = {
-	  level: 1,
-	  ledgeRange: [15, 50]
-	};
-	
-	Level.set(1, levelOne);
-	
-	module.exports = Level;
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	function Block(canvasWidth) {
-	  var _this = this;
-	
-	  this.size = 25;
-	  this.sizeIncrement = 500;
-	  this.x = function () {
-	    return canvasWidth / 2 - _this.size / 2;
-	  };
-	  this.y = function () {
-	    return 70 - _this.size / 2;
-	  };
-	  this.rotation = 0;
-	}
-	
-	Block.prototype.grow = function (modifier) {
-	  this.size += this.sizeIncrement * modifier;
-	};
-	
-	module.exports = Block;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	function UpperWall(gap, screenWidth) {
-	  this.gap = gap;
-	  this.screenWidth = screenWidth;
-	}
-	
-	module.exports = UpperWall;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	function LowerWall(gap, screenWidth) {
-	  this.gap = gap;
-	  this.screenWidth = screenWidth;
-	}
-	
-	module.exports = LowerWall;
-
-/***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Canvas = __webpack_require__(2);
+	var Canvas = __webpack_require__(6);
 	
 	function View(game, canvas) {
 	  var _this = this;
@@ -357,7 +357,7 @@
 	      this.ctx.beginPath();
 	      this.ctx.translate(this.block.x() + this.block.size / 2, this.block.y() + this.block.size / 2);
 	      this.ctx.rotate((45 - this.block.rotation) * Math.PI / 180);
-	      this.ctx.rect(this.block.size / 2 * -1, 0, this.block.size, this.block.size);
+	      this.ctx.rect(0 - this.block.size / 2, 0 - this.block.size / 2, this.block.size, this.block.size);
 	      this.ctx.fillStyle = "whitesmoke";
 	      this.ctx.fill();
 	
@@ -368,7 +368,7 @@
 	      this.ctx.beginPath();
 	      this.ctx.translate(this.block.x() + this.block.size / 2, this.block.y() + this.block.size / 2);
 	      this.ctx.rotate(45 * Math.PI / 180);
-	      this.ctx.rect(this.block.size / 2 * -1, -0, this.block.size, this.block.size);
+	      this.ctx.rect(0 - this.block.size / 2, 0 - this.block.size / 2, this.block.size, this.block.size);
 	      this.ctx.fillStyle = "whitesmoke";
 	      this.ctx.fill();
 	
