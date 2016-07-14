@@ -5,6 +5,6 @@ const levelOne = {
   ledgeRange: [15, 50] 
 };
 
-level.set(1, levelOne);
+Level.set(1, levelOne);
 
 module.exports = Level;

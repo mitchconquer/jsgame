@@ -1,5 +1,12 @@
-const Game = require('./game');
+const Game = require('./game'),
+      Canvas = require('./canvas'),
+      View = require('./view');
 
 $(() => {
-  const game = new Game();
+  const canvas = new Canvas();
+  const game = new Game(canvas.canvas.offsetWidth);
+  const view = new View(game, canvas);
 });
+
+window.Game = Game;
+window.View = View;

@@ -1,5 +1,4 @@
-const Canvas = require('./canvas'),
-      LevelConstants = require('./level_constants'),
+const LevelConstants = require('./level_constants'),
       Block = require('./block'),
       UpperWall = require('./upper_wall'),
       LowerWall = require('./lower_wall');
@@ -31,7 +30,7 @@ function Game(width = 300, height = 580) {
 
 /* RENDERING */
 
-Game.prototype.height = function(newHeight) {
+Game.prototype.setHeight = function(newHeight) {
   if (newHeight) {
     this.height = newHeight;
     return this.height;
@@ -39,10 +38,11 @@ Game.prototype.height = function(newHeight) {
   return this.height;
 };
 
-Game.prototype.width = function(newWidth) {
+Game.prototype.setWidth = function(newWidth) {
   if (newWidth) {
     this.width = newWidth;
     return this.width;
+    console.log('Game#width = called ' + newWidth);
   }
   return this.width;
 };
@@ -61,32 +61,29 @@ Game.prototype.gameLoop = function() {
 Game.prototype.setupRound = function(levelNumber) {
   this.upperGap = this.randGap();
   this.lowerGap = this.upperGap - this.randLedge();
-  this.block = new Block((this.width / 2));
+  this.block = new Block(this.width);
   this.upperWall = new UpperWall(this.upperGap, this.width);
   this.lowerWall = new LowerWall(this.lowerGap, this.width);
 
   this.roundIsSetup = true;
 };
 
-Game.prototype.startGrowing = function() {
-  this.block.startGrowing();
-};
-
-Game.prototype.stopGrowing = function() {
-  this.block.stopGrowing();
-  this.roundIsSetup = false;
-  this.checkBlockSize();
+Game.prototype.growBlock = function(modifier) {
+  this.block.grow(modifier);
 };
 
 Game.prototype.checkBlockSize = function() {
+  this.roundIsSetup = false;
+
   if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
     this.roundsWon += 1;
+    console.log('Round Won!');
   } else {
     this.roundsLost += 1;
+    console.log('Round Lost :(');
   }
 
   // Restart the game loop
-  this.gameLoop();
 };
 
 /* GAME UTILS */

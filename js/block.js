@@ -1,27 +1,22 @@
-function Block(xPos, yPos = 20) {
+function Block(canvasWidth) {
   this.size = 25;
-  this.growing = false;
-  this.sizeIncrement = 1;
-  this.xPos = xPos;
-  this.yPos = yPos;
+  this.sizeIncrement = 500;
+  this.x = (canvasWidth / 2) - (this.size / 2);
+  this.y = 200;
+  console.log('Block.canvasWidth = ' + canvasWidth);
 }
 
-Block.prototype.startGrowing = function() {
-  this.growing = true;
-  this.grow();
-};
+// Block.prototype.startGrowing = function() {
+//   this.growing = true;
+//   this.grow();
+// };
 
-Block.prototype.stopGrowing = function() {
-  this.growing = false;
-};
+// Block.prototype.stopGrowing = function() {
+//   this.growing = false;
+// };
 
-Block.prototype.grow = function() {
-  console.log('Block#grow');
-  if (this.growing) {
-    window.setTimeout(this.grow.bind(this), 50);
-    this.size += this.sizeIncrement;
-    console.log('block size = ' + this.size);
-  }
+Block.prototype.grow = function(modifier) {
+  this.size += this.sizeIncrement * modifier;
 };
 
 module.exports = Block;
