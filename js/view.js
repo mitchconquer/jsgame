@@ -74,24 +74,28 @@ View.prototype.render = function() {
 
 View.prototype.renderBlock = function() {
   if ( this.game.block ) {
-    if ( this.block.rotation > 0 ) {
-      this.ctx.save();
 
-      this.ctx.beginPath();
-      this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
-      this.ctx.rotate( ( 45 - this.block.rotation) * Math.PI / 180);
-      this.ctx.rect( ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
-      this.ctx.fillStyle = "whitesmoke";
-      this.ctx.fill();
-
-      this.ctx.restore();
-    } else {
+    if ( this.block.rotation < 1 ) {
+      // Not yet done growing the block
       this.ctx.save();
 
       this.ctx.beginPath();
       this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
       this.ctx.rotate( 45 * Math.PI / 180 );
       this.ctx.rect(  ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
+      this.ctx.fillStyle = "whitesmoke";
+      this.ctx.fill();
+
+      this.ctx.restore();
+      
+    } else {
+      // Done growing the block, now rotating
+      this.ctx.save();
+
+      this.ctx.beginPath();
+      this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
+      this.ctx.rotate( ( 45 - this.block.rotation) * Math.PI / 180);
+      this.ctx.rect( ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
 
