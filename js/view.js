@@ -57,6 +57,7 @@ View.prototype.update = function(modifier) {
 
   if (this.droppingBlock) {
     // Drop that block
+    this.dropBlock(modifier);
   }
 };
 
@@ -95,7 +96,7 @@ View.prototype.renderBlock = function() {
       this.ctx.beginPath();
       this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
       this.ctx.rotate( ( 45 - this.block.rotation) * Math.PI / 180);
-      this.ctx.rect( ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
+      this.ctx.rect( ( 0 - ( this.block.size / 2) - this.block.movementY), ( 0 - ( this.block.size / 2 ) + this.block.movementY), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
 
@@ -120,7 +121,9 @@ View.prototype.rotateBlock = function(modifier) {
 };
 
 View.prototype.dropBlock = function(modifier) {
-  
+  if ( this.block.movementY < 700) {
+    this.block.drop(modifier);
+  }
 };
 
 /* UTILITY METHODS */

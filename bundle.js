@@ -191,15 +191,17 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	function Block(canvasWidth) {
 	  var _this = this;
 	
 	  this.size = 25;
 	  this.sizeIncrement = 300;
+	  this.velocityY = 2000;
+	  this.movementY = 0;
 	  this.x = function () {
-	    return canvasWidth / 2 - _this.size / 2;
+	    return canvasWidth / 2 - _this.size / 2 + _this.movementY;
 	  };
 	  this.y = function () {
 	    return 70 - _this.size / 2;
@@ -209,6 +211,11 @@
 	
 	Block.prototype.grow = function (modifier) {
 	  this.size += this.sizeIncrement * modifier;
+	};
+	
+	Block.prototype.drop = function (modifier) {
+	  this.movementY += modifier * this.velocityY;
+	  console.log('this.movementY ' + this.movementY);
 	};
 	
 	module.exports = Block;
@@ -334,6 +341,7 @@
 	
 	  if (this.droppingBlock) {
 	    // Drop that block
+	    this.dropBlock(modifier);
 	  }
 	};
 	
@@ -371,7 +379,7 @@
 	      this.ctx.beginPath();
 	      this.ctx.translate(this.block.x() + this.block.size / 2, this.block.y() + this.block.size / 2);
 	      this.ctx.rotate((45 - this.block.rotation) * Math.PI / 180);
-	      this.ctx.rect(0 - this.block.size / 2, 0 - this.block.size / 2, this.block.size, this.block.size);
+	      this.ctx.rect(0 - this.block.size / 2 - this.block.movementY, 0 - this.block.size / 2 + this.block.movementY, this.block.size, this.block.size);
 	      this.ctx.fillStyle = "whitesmoke";
 	      this.ctx.fill();
 	
@@ -395,7 +403,11 @@
 	  }
 	};
 	
-	View.prototype.dropBlock = function (modifier) {};
+	View.prototype.dropBlock = function (modifier) {
+	  if (this.block.movementY < 700) {
+	    this.block.drop(modifier);
+	  }
+	};
 	
 	/* UTILITY METHODS */
 	View.prototype.randomBackground = function () {
