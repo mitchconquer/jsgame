@@ -6,14 +6,9 @@ function View(game, canvas) {
   this.ctx = canvas.ctx;
   this.game = game;
   this.block = this.game.block;
-
-  /* VIEW STATE */
-  this.mouseDown = false;
-  this.userClicked = false;
-  this.rotatingBlock = false;
-  this.droppingBlock = false;
   this.backgroundColors = ['#3D504C', '#C63020', '#202332'];
-  this.backgroundColor = this.randomBackground();
+
+  this.setInitialState();
 
   /* EVENT LISTENERS */
   this.canvas.addEventListener('mousedown', () => { this.mouseDown = true;console.log('this.mouseDown = true');});
@@ -43,16 +38,22 @@ View.prototype.update = function(modifier) {
     this.game.growBlock(modifier);
     this.userClicked = true;
   } 
-  if (this.userClicked && this.mouseDown === false) {
+
+  if ( this.userClicked === true  && 
+       this.block.rotation < 1    && 
+       this.mouseDown === false   && 
+       this.rotatingBlock === false ) 
+  {
     // Rotate block
-    this.rotateBlock(modifier);
+    this.rotatingBlock = true;
     // Drop block
     // Give result
     // Restart Game
   }
 
   if (this.rotatingBlock) {
-    // rotate the block and trigger "drop block" when done
+    // rotate the block (triggers "drop block" when done)
+    this.rotateBlock(modifier);
   }
 
   if (this.droppingBlock) {
@@ -108,15 +109,16 @@ View.prototype.renderBlock = function() {
 /* ANIMATION METHODS */
 
 View.prototype.rotateBlock = function(modifier) {
-  this.rotatingBlock = true;
+  // this.rotatingBlock = true;
   // Rotate that block
   this.block.rotation += 150 * modifier;
 
-  if (this.block.rotation >= 45) {
+  if (this.block.rotation >= 45 && this.rotatingBlock === true) {
     // Block is fully rotated
     this.block.rotation = 45;
     this.rotatingBlock = false;
     this.droppingBlock = true;
+    this.game.checkBlockSize();
   }
 };
 
@@ -142,7 +144,19 @@ View.prototype.checkCollisions = function() {
 
 View.prototype.checkOutOfBounds = function() {
   // If the block is out of bounds, restart
+  if (this.block.movementY >= 700) {
+    this.setInitialState();
+  }
+};
 
+View.prototype.setInitialState = function() {
+  this.mouseDown = false;
+  this.userClicked = false;
+  this.rotatingBlock = false;
+  this.droppingBlock = false;
+  this.backgroundColor = this.randomBackground();
+  this.block = this.game.block;
+  // Delay and rewind up block
 };
 
 module.exports = View;

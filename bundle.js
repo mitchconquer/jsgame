@@ -80,21 +80,6 @@
 	  this.height = height;
 	  this.roundsWon = 0;
 	  this.roundsLost = 0;
-	  this.block = undefined;
-	  this.upperWall = undefined;
-	  this.lowerWall = undefined;
-	
-	  /* Level data */
-	  this.level = 1;
-	  this.maxUpperGap = 280;
-	  this.minUpperGap = 35;
-	  this.ledgeRange = [15, 50];
-	
-	  /* Round state */
-	  this.roundIsSetup = false;
-	  this.upperGap = 0;
-	  this.lowerGap = 0;
-	
 	  this.gameLoop();
 	}
 	
@@ -129,13 +114,24 @@
 	};
 	
 	Game.prototype.setupRound = function (levelNumber) {
+	  console.log('Game#setupRound');
+	  /* Level data */
+	  this.level = 1;
+	  this.maxUpperGap = 280;
+	  this.minUpperGap = 35;
+	  this.ledgeRange = [15, 50];
+	
+	  /* Round state */
+	  // this.roundIsSetup = false;
+	  this.upperGap = 0;
+	  this.lowerGap = 0;
 	  this.upperGap = this.randGap();
 	  this.lowerGap = this.upperGap - this.randLedge();
 	  this.block = new Block(this.width);
 	  this.upperWall = new UpperWall(this.upperGap, this.width);
 	  this.lowerWall = new LowerWall(this.lowerGap, this.width);
 	
-	  this.roundIsSetup = true;
+	  // this.roundIsSetup = true;
 	};
 	
 	Game.prototype.growBlock = function (modifier) {
@@ -143,7 +139,7 @@
 	};
 	
 	Game.prototype.checkBlockSize = function () {
-	  this.roundIsSetup = false;
+	  // this.roundIsSetup = false;
 	
 	  if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
 	    this.roundsWon += 1;
@@ -154,6 +150,8 @@
 	  }
 	
 	  // Restart the game loop
+	  // Reset initial start values
+	  this.gameLoop();
 	};
 	
 	/* GAME UTILS */
@@ -191,7 +189,7 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	function Block(canvasWidth) {
 	  var _this = this;
@@ -215,7 +213,6 @@
 	
 	Block.prototype.drop = function (modifier) {
 	  this.movementY += modifier * this.velocityY;
-	  console.log('this.movementY ' + this.movementY);
 	};
 	
 	module.exports = Block;
@@ -286,14 +283,9 @@
 	  this.ctx = canvas.ctx;
 	  this.game = game;
 	  this.block = this.game.block;
-	
-	  /* VIEW STATE */
-	  this.mouseDown = false;
-	  this.userClicked = false;
-	  this.rotatingBlock = false;
-	  this.droppingBlock = false;
 	  this.backgroundColors = ['#3D504C', '#C63020', '#202332'];
-	  this.backgroundColor = this.randomBackground();
+	
+	  this.setInitialState();
 	
 	  /* EVENT LISTENERS */
 	  this.canvas.addEventListener('mousedown', function () {
@@ -327,16 +319,18 @@
 	    this.game.growBlock(modifier);
 	    this.userClicked = true;
 	  }
-	  if (this.userClicked && this.mouseDown === false) {
+	
+	  if (this.userClicked === true && this.block.rotation < 1 && this.mouseDown === false && this.rotatingBlock === false) {
 	    // Rotate block
-	    this.rotateBlock(modifier);
+	    this.rotatingBlock = true;
 	    // Drop block
 	    // Give result
 	    // Restart Game
 	  }
 	
 	  if (this.rotatingBlock) {
-	    // rotate the block and trigger "drop block" when done
+	    // rotate the block (triggers "drop block" when done)
+	    this.rotateBlock(modifier);
 	  }
 	
 	  if (this.droppingBlock) {
@@ -391,15 +385,16 @@
 	/* ANIMATION METHODS */
 	
 	View.prototype.rotateBlock = function (modifier) {
-	  this.rotatingBlock = true;
+	  // this.rotatingBlock = true;
 	  // Rotate that block
 	  this.block.rotation += 150 * modifier;
 	
-	  if (this.block.rotation >= 45) {
+	  if (this.block.rotation >= 45 && this.rotatingBlock === true) {
 	    // Block is fully rotated
 	    this.block.rotation = 45;
 	    this.rotatingBlock = false;
 	    this.droppingBlock = true;
+	    this.game.checkBlockSize();
 	  }
 	};
 	
@@ -421,7 +416,19 @@
 	
 	View.prototype.checkOutOfBounds = function () {
 	  // If the block is out of bounds, restart
+	  if (this.block.movementY >= 700) {
+	    this.setInitialState();
+	  }
+	};
 	
+	View.prototype.setInitialState = function () {
+	  this.mouseDown = false;
+	  this.userClicked = false;
+	  this.rotatingBlock = false;
+	  this.droppingBlock = false;
+	  this.backgroundColor = this.randomBackground();
+	  this.block = this.game.block;
+	  // Delay and rewind up block
 	};
 	
 	module.exports = View;
