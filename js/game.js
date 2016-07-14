@@ -1,6 +1,8 @@
 const Canvas = require('./canvas'),
       LevelConstants = require('./level_constants'),
-      Block = require('./block');
+      Block = require('./block'),
+      UpperWall = require('./upper_wall'),
+      LowerWall = require('./lower_wall');
 
 
 function Game(width = 300, height = 580) {
@@ -9,6 +11,9 @@ function Game(width = 300, height = 580) {
   this.height = height;
   this.roundsWon = 0;
   this.roundsLost = 0;
+  this.block = undefined;
+  this.upperWall = undefined;
+  this.lowerWall = undefined;
 
   /* Level data */
   this.level = 1;
@@ -18,8 +23,8 @@ function Game(width = 300, height = 580) {
 
   /* Round state */
   this.roundIsSetup = false;
-  this.upperGap = undefined;
-  this.lowerGap = undefined;
+  this.upperGap = 0;
+  this.lowerGap = 0;
 
   this.gameLoop();
 }
@@ -55,26 +60,26 @@ Game.prototype.gameLoop = function() {
 
 Game.prototype.setupRound = function(levelNumber) {
   this.upperGap = this.randGap();
-  this.lowerGap = upperGap - this.randLedge();
+  this.lowerGap = this.upperGap - this.randLedge();
+  this.block = new Block((this.width / 2));
+  this.upperWall = new UpperWall(this.upperGap, this.width);
+  this.lowerWall = new LowerWall(this.lowerGap, this.width);
+
   this.roundIsSetup = true;
-  const level = LevelConstants.get(levelNumber),
-        block = new Block((this.width / 2)),
-        upperWall = new UpperWall(this.upperGap, this.width),
-        lowerWall = new LowerWall(this.lowerGap, this.width);
 };
 
-Game.prototype.startGrowing = function(block) {
-  block.startGrowing();
+Game.prototype.startGrowing = function() {
+  this.block.startGrowing();
 };
 
-Game.prototype.stopGrowing = function(block) {
-  block.stopGrowing();
+Game.prototype.stopGrowing = function() {
+  this.block.stopGrowing();
   this.roundIsSetup = false;
-  this.checkBlockSize(block);
+  this.checkBlockSize();
 };
 
-Game.prototype.checkBlockSize = function(block) {
-  if (block.size > this.lowerGap && block.size < this.upperGap) {
+Game.prototype.checkBlockSize = function() {
+  if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
     this.roundsWon += 1;
   } else {
     this.roundsLost += 1;
@@ -87,11 +92,11 @@ Game.prototype.checkBlockSize = function(block) {
 /* GAME UTILS */
 
 Game.prototype.randGap = function() {
-  return Math.random() * (this.maxUpperGap - this.minUpperGap) + this.minUpperGap;
+  return Math.floor(Math.random() * (this.maxUpperGap - this.minUpperGap) + this.minUpperGap);
 };
 
 Game.prototype.randLedge = function() {
-  return Math.random() * (this.ledge[1] - this.ledge[0]) + this.ledge[0];
+  return Math.floor(Math.random() * (this.ledgeRange[1] - this.ledgeRange[0]) + this.ledgeRange[0]);
 };
 
 
