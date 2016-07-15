@@ -333,6 +333,7 @@
 	  if (this.mouseDown && this.rotatingBlock === false && this.droppingBlock === false) {
 	    this.game.growBlock(modifier);
 	    this.userClicked = true;
+	    this.displayingInstructions = false;
 	  }
 	
 	  if (this.userClicked === true && this.block.rotation < 1 && this.mouseDown === false && this.rotatingBlock === false) {
@@ -345,6 +346,7 @@
 	
 	  if (this.rotatingBlock) {
 	    // rotate the block (triggers "drop block" when done)
+	
 	    this.rotateBlock(modifier);
 	  }
 	
@@ -363,6 +365,9 @@
 	
 	  this.renderBlock();
 	  this.renderWalls();
+	  if (this.displayingInstructions) {
+	    this.displayInstructions();
+	  }
 	  if (this.displayingResults) {
 	    this.displayResults();
 	  }
@@ -455,18 +460,31 @@
 	  }
 	};
 	
+	View.prototype.displayInstructions = function () {
+	  this.ctx.font = "35px Kanit";
+	  this.ctx.textAlign = "center";
+	  this.ctx.fillStyle = "rgba( 255, 255, 255, 0.7)";
+	  this.ctx.strokeStyle = "rgba( 255, 255, 255, 0.7)";
+	  this.ctx.fillText("CLICK AND HOLD TO GROW", this.canvas.offsetWidth / 2, 130);
+	  this.ctx.fillText("RELEASE TO DROP", this.canvas.offsetWidth / 2, 160);
+	};
+	
 	View.prototype.displayResults = function () {
 	  console.log('display results');
 	  if (this.game.won) {
-	    this.ctx.font = "35px Open Sans";
+	    this.ctx.font = "35px Kanit";
 	    this.ctx.textAlign = "center";
-	    this.ctx.fillText("YAASSSS, QUEEN!", this.canvas.offsetWidth / 2, 100);
-	    this.ctx.fillText("YOU SLAYED!", this.canvas.offsetWidth / 2, 150);
+	    this.ctx.fillStyle = "rgba( 255, 255, 255, 0.7)";
+	    this.ctx.strokeStyle = "rgba( 255, 255, 255, 0.7)";
+	    this.ctx.fillText("YAAS, QUEEN!", this.canvas.offsetWidth / 2, 100);
+	    this.ctx.fillText("YOU SLAYED!", this.canvas.offsetWidth / 2, 130);
 	  } else {
-	    this.ctx.font = "35px Open Sans";
+	    this.ctx.font = "35px Kanit";
 	    this.ctx.textAlign = "center";
-	    this.ctx.fillText("NO, NO, NO.", this.canvas.offsetWidth / 2, 100);
-	    this.ctx.fillText("SASHAY AWAY.", this.canvas.offsetWidth / 2, 150);
+	    this.ctx.fillStyle = "rgba( 255, 255, 255, 0.7)";
+	    this.ctx.strokeStyle = "rgba( 255, 255, 255, 0.7)";
+	    this.ctx.fillText("OH NO!", this.canvas.offsetWidth / 2, 100);
+	    this.ctx.fillText("SASHAY AWAY.", this.canvas.offsetWidth / 2, 130);
 	  }
 	};
 	
@@ -520,8 +538,8 @@
 	  if (this.userClicked === false) {
 	    return;
 	  }
-	  console.log('called setInitialState();');
 	  this.game.reset();
+	  this.displayingInstructions = true;
 	  this.mouseDown = false;
 	  this.userClicked = false;
 	  this.displayingResults = false;
