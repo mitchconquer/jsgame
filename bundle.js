@@ -467,11 +467,15 @@
 	    var topOfWall = this.canvas.offsetHeight - 80;
 	    if (this.droppingBlock === true && this.block.y() + this.block.size >= topOfWall) {
 	      this.blockY = 500 - this.block.size;
-	      console.log(this.block.y() + this.block.size - topOfWall);
 	      this.wallCollision();
 	    }
 	  } else if (this.block.size > this.lowerGap) {
 	    // Check for collision with lower wall
+	    var _topOfWall = this.canvas.offsetHeight - 50;
+	    if (this.droppingBlock === true && this.block.y() + this.block.size >= _topOfWall) {
+	      this.blockY = 530 - this.block.size;
+	      this.wallCollision();
+	    }
 	  }
 	};
 	
