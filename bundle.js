@@ -218,9 +218,24 @@
 	  this.velocityY = 400;
 	};
 	
+	Block.prototype.shrink = function (modifier) {
+	  if (this.size > 300) {
+	    this.size -= Math.floor(this.sizeIncrement * (this.size * .15) * modifier);
+	  } else if (this.size > 150) {
+	    this.size -= Math.floor(this.sizeIncrement * (this.size * .1) * modifier);
+	  } else {
+	    this.size -= Math.floor(this.sizeIncrement * (this.size * .02) * modifier);
+	  }
+	};
+	
 	Block.prototype.drop = function (modifier) {
 	  this.velocityY += this.velocityY * 0.2;
 	  this.movementY += modifier * this.velocityY;
+	};
+	
+	Block.prototype.rewind = function (modifier) {
+	  this.velocityY += 2000;
+	  this.movementY -= modifier * this.velocityY;
 	};
 	
 	Block.prototype.stop = function (modifier) {
@@ -360,6 +375,11 @@
 	    // Drop that block
 	    this.dropBlock(modifier);
 	  }
+	
+	  if (this.rewinding) {
+	    // Bring that block back up
+	    this.rewindBlock(modifier);
+	  }
 	};
 	
 	View.prototype.render = function () {
@@ -411,8 +431,15 @@
 	      this.ctx.fill();
 	
 	      this.ctx.restore();
+	    } else if (this.rewinding) {
+	      // Done rotating the block, drop it & rewind it
+	      this.ctx.beginPath();
+	      // const blockY = this.blockY ? this.blockY : (this.block.y());
+	      this.ctx.rect(this.canvas.offsetWidth / 2 - this.block.size / 2, this.block.y(), this.block.size, this.block.size);
+	      this.ctx.fillStyle = "whitesmoke";
+	      this.ctx.fill();
 	    } else {
-	      // Done rotating the block, drop it
+	      // Done rotating the block, drop it & rewind it
 	      this.ctx.beginPath();
 	      var blockY = this.blockY ? this.blockY : this.block.y();
 	      this.ctx.rect(this.canvas.offsetWidth / 2 - this.block.size / 2, blockY, this.block.size, this.block.size);
@@ -464,6 +491,24 @@
 	View.prototype.dropBlock = function (modifier) {
 	  if (this.block.movementY < this.canvas.offsetHeight) {
 	    this.block.drop(modifier);
+	  }
+	};
+	
+	View.prototype.rewindBlock = function (modifier) {
+	  if (this.block.y() > 58.5) {
+	    this.block.rewind(modifier);
+	  }
+	
+	  if (this.block.y() < 58.5) {
+	    this.block.movementY = 0;
+	  }
+	
+	  if (this.block.size > 25) {
+	    this.block.shrink(modifier);
+	  }
+	
+	  if (this.block.size < 25) {
+	    this.block.size = 25;
 	  }
 	};
 	
@@ -563,9 +608,14 @@
 	};
 	
 	View.prototype.showResultsAndReset = function () {
+	  var _this2 = this;
+	
 	  this.displayingResults = true;
 	  if (this.initializing === false) {
-	    window.setTimeout(this.setInitialState.bind(this), 1000);
+	    window.setTimeout(function () {
+	      _this2.rewinding = true;
+	    }, 1000);
+	    window.setTimeout(this.setInitialState.bind(this), 2000);
 	    this.initializing = true;
 	  }
 	};
@@ -574,7 +624,12 @@
 	  if (this.userClicked === false) {
 	    return;
 	  }
+	
+	  /* GAME REFERENCES */
 	  this.game.reset();
+	  this.block = this.game.block;
+	
+	  /* GAME STATE FLAGS */
 	  this.displayingInstructions = true;
 	  this.mouseDown = false;
 	  this.userClicked = false;
@@ -582,11 +637,13 @@
 	  this.rotatingBlock = false;
 	  this.initializing = false;
 	  this.droppingBlock = false;
+	  this.rewinding = false;
+	
+	  /* GAME ANIMATION VALUES */
 	  this.blockY = undefined;
 	  this.rockingDirection = "outwards";
 	  this.rockingModifier = 0;
 	  this.backgroundColor = this.randomBackground();
-	  this.block = this.game.block;
 	  this.lowerGap = this.game.lowerGap;
 	  this.upperGap = this.game.upperGap;
 	  // Delay and rewind up block

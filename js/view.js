@@ -66,6 +66,11 @@ View.prototype.update = function(modifier) {
     this.dropBlock(modifier);
   }
 
+  if (this.rewinding) {
+    // Bring that block back up
+    this.rewindBlock(modifier);
+  }
+
 };
 
 View.prototype.render = function() {
@@ -118,8 +123,15 @@ View.prototype.renderBlock = function() {
       this.ctx.fill();
 
       this.ctx.restore();
+    } else if (this.rewinding) {
+      // Done rotating the block, drop it & rewind it
+      this.ctx.beginPath();
+      // const blockY = this.blockY ? this.blockY : (this.block.y());
+      this.ctx.rect( ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), this.block.y(), this.block.size, this.block.size );
+      this.ctx.fillStyle = "whitesmoke";
+      this.ctx.fill();
     } else {
-      // Done rotating the block, drop it
+      // Done rotating the block, drop it & rewind it
       this.ctx.beginPath();
       const blockY = this.blockY ? this.blockY : (this.block.y());
       this.ctx.rect( ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), blockY, this.block.size, this.block.size );
@@ -171,6 +183,24 @@ View.prototype.rotateBlock = function(modifier) {
 View.prototype.dropBlock = function( modifier ) {
   if ( this.block.movementY < this.canvas.offsetHeight ) {
     this.block.drop(modifier);
+  }
+};
+
+View.prototype.rewindBlock = function(modifier) {
+  if ( this.block.y() > 58.5 ) {
+    this.block.rewind(modifier)
+  }
+
+  if (this.block.y() < 58.5) {
+    this.block.movementY = 0;
+  }
+
+  if (this.block.size > 25) {
+    this.block.shrink(modifier);
+  }
+
+  if (this.block.size < 25) {
+    this.block.size = 25;
   }
 };
 
@@ -277,7 +307,8 @@ View.prototype.wallCollision = function(modifier) {
 View.prototype.showResultsAndReset = function() {
   this.displayingResults = true;
   if (this.initializing === false) {
-    window.setTimeout(this.setInitialState.bind(this), 1000);
+    window.setTimeout(() => {this.rewinding = true;}, 1000);
+    window.setTimeout(this.setInitialState.bind(this), 2000);
     this.initializing = true;
   }
 };
@@ -286,7 +317,12 @@ View.prototype.setInitialState = function() {
   if (this.userClicked === false) {
     return;
   }
+
+  /* GAME REFERENCES */
   this.game.reset();
+  this.block = this.game.block;
+
+  /* GAME STATE FLAGS */
   this.displayingInstructions = true;
   this.mouseDown = false;
   this.userClicked = false;
@@ -294,11 +330,13 @@ View.prototype.setInitialState = function() {
   this.rotatingBlock = false;
   this.initializing = false;
   this.droppingBlock = false;
+  this.rewinding = false;
+
+  /* GAME ANIMATION VALUES */
   this.blockY = undefined;
   this.rockingDirection = "outwards";
   this.rockingModifier = 0;
   this.backgroundColor = this.randomBackground();
-  this.block = this.game.block;
   this.lowerGap = this.game.lowerGap;
   this.upperGap = this.game.upperGap;
   // Delay and rewind up block
