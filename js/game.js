@@ -9,6 +9,7 @@ function Game(width = 300, height = 580) {
   this.won = false;
   this.width = width;
   this.height = height;
+  this.height = height;
   this.roundsWon = 0;
   this.roundsLost = 0;
   this.gameLoop();

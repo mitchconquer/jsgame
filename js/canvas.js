@@ -12,6 +12,8 @@ Canvas.prototype.init = function() {
 
 Canvas.prototype.resizeCanvas = function() {
   this.canvas.setAttribute('width', document.getElementById('container').offsetWidth);
+  const height = (document.getElementById('container').offsetHeight - 50) < 1000 ? (document.getElementById('container').offsetHeight - 50) : 1000;
+  this.canvas.setAttribute('height', height);
 };
 
 module.exports = Canvas;

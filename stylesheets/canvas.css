@@ -1,6 +1,22 @@
+
+html, body {
+  height: 100%;
+  overflow-y: hidden;
+}
+
 body {
   text-align: center;
   background-color: #222;
+  margin: 0;
+  display: table;
+  width: 100%;
+  padding: 0;
+}
+
+.body-wrapper {
+  display: table-cell;
+  height: 100%;
+  width: 100%;
 }
 
 h1 {
@@ -11,6 +27,8 @@ h1 {
 
 #wrapper {
   text-align: center;
+  height: 100%;
+  width: 100%;
 }
 
 #container {

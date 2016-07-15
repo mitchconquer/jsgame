@@ -17,6 +17,7 @@ function View(game, canvas) {
   this.canvas.addEventListener('touchend', () => { this.mouseDown = false; });
   
   this.game.setWidth(this.canvas.width);
+  this.game.setHeight(this.canvas.height);
   this.then = Date.now();
   this.main();
 }

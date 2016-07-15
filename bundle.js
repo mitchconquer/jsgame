@@ -79,6 +79,7 @@
 	  this.won = false;
 	  this.width = width;
 	  this.height = height;
+	  this.height = height;
 	  this.roundsWon = 0;
 	  this.roundsLost = 0;
 	  this.gameLoop();
@@ -274,6 +275,8 @@
 	
 	Canvas.prototype.resizeCanvas = function () {
 	  this.canvas.setAttribute('width', document.getElementById('container').offsetWidth);
+	  var height = document.getElementById('container').offsetHeight - 50 < 1000 ? document.getElementById('container').offsetHeight - 50 : 1000;
+	  this.canvas.setAttribute('height', height);
 	};
 	
 	module.exports = Canvas;
@@ -313,6 +316,7 @@
 	  });
 	
 	  this.game.setWidth(this.canvas.width);
+	  this.game.setHeight(this.canvas.height);
 	  this.then = Date.now();
 	  this.main();
 	}
