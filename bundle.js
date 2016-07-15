@@ -275,7 +275,7 @@
 	
 	Canvas.prototype.resizeCanvas = function () {
 	  this.canvas.setAttribute('width', document.getElementById('container').offsetWidth);
-	  var height = document.getElementById('container').offsetHeight - 50 < 1000 ? document.getElementById('container').offsetHeight - 50 : 1000;
+	  var height = document.getElementById('container').offsetHeight - 100;
 	  this.canvas.setAttribute('height', height);
 	};
 	
