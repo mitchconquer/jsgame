@@ -94,9 +94,11 @@ View.prototype.renderBlock = function() {
       // Not yet done growing the block
       this.ctx.save();
 
+      const modifier = this.updateRockingModifier();
+
       this.ctx.beginPath();
       this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
-      this.ctx.rotate( 45 * Math.PI / 180 );
+      this.ctx.rotate( (45 + modifier) * Math.PI / 180 );
       this.ctx.rect(  ( 0 - ( this.block.size / 2) ), ( 0 - ( this.block.size / 2 ) ), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
@@ -154,7 +156,6 @@ View.prototype.renderWalls = function() {
 /* ANIMATION METHODS */
 
 View.prototype.rotateBlock = function(modifier) {
-  // this.rotatingBlock = true;
   // Rotate that block
   this.block.rotation += 150 * modifier;
 
@@ -207,6 +208,27 @@ View.prototype.displayResults = function() {
     this.ctx.fillText("OH NO!", (this.canvas.offsetWidth / 2), 100);
     this.ctx.fillText("SASHAY AWAY.", (this.canvas.offsetWidth / 2), 130);
   }
+};
+
+View.prototype.updateRockingModifier = function() {
+  const min = -8;
+  const max = 8;
+  const increment = .9;
+  if (this.rockingDirection === "outwards" && this.rockingModifier >= max) {
+    this.rockingDirection = "inwards";
+  } else if (this.rockingDirection === "inwards" && this.rockingModifier <= min) {
+    this.rockingDirection = "outwards";
+  }
+
+  if (this.rockingDirection === "outwards") {
+    this.rockingModifier += increment;
+  }
+
+  if (this.rockingDirection === "inwards") {
+    this.rockingModifier -= increment;
+  }
+
+  return this.rockingModifier;
 };
 
 /* UTILITY METHODS */
@@ -273,6 +295,8 @@ View.prototype.setInitialState = function() {
   this.initializing = false;
   this.droppingBlock = false;
   this.blockY = undefined;
+  this.rockingDirection = "outwards";
+  this.rockingModifier = 0;
   this.backgroundColor = this.randomBackground();
   this.block = this.game.block;
   this.lowerGap = this.game.lowerGap;
