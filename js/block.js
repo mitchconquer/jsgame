@@ -30,7 +30,7 @@ Block.prototype.drop = function(modifier) {
 };
 
 Block.prototype.rewind = function(modifier) {
-  this.velocityY += 2000;
+  this.velocityY += 100;
   this.movementY -= modifier * this.velocityY;
 };
 

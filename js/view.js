@@ -7,6 +7,7 @@ function View(game, canvas) {
   this.game = game;
   this.block = this.game.block;
   this.backgroundColors = ['#3D504C', '#C63020', '#202332'];
+  this.backgroundColor = this.randomBackground();
 
   this.setInitialState();
 
@@ -50,9 +51,6 @@ View.prototype.update = function(modifier) {
   {
     // Rotate block
     this.rotatingBlock = true;
-    // Drop block
-    // Give result
-    // Restart Game
   }
 
   if (this.rotatingBlock) {
@@ -69,6 +67,11 @@ View.prototype.update = function(modifier) {
   if (this.rewinding) {
     // Bring that block back up
     this.rewindBlock(modifier);
+  }
+
+  if (this.rewindingRotation) {
+    this.unrotateBlock(modifier);
+
   }
 
 };
@@ -96,7 +99,7 @@ View.prototype.renderBlock = function() {
   if ( this.game.block ) {
 
     if ( this.block.rotation < 1 ) {
-      // Not yet done growing the block
+      // Game ready, waiting for user input or growing the block
       this.ctx.save();
 
       const modifier = this.updateRockingModifier();
@@ -110,7 +113,7 @@ View.prototype.renderBlock = function() {
 
       this.ctx.restore();
       
-    } else if (this.block.rotation < 45) {
+    } else if (this.rewindingRotation === false && this.block.rotation < 45) {
       // Done growing the block, now rotating
       this.ctx.save();
 
@@ -123,6 +126,15 @@ View.prototype.renderBlock = function() {
       this.ctx.fill();
 
       this.ctx.restore();
+
+    } else if (this.droppingBlock === true) {
+      // Done rotating the block, drop it & rewind it
+      this.ctx.beginPath();
+      const blockY = this.blockY ? this.blockY : (this.block.y());
+      this.ctx.rect( ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), blockY, this.block.size, this.block.size );
+      this.ctx.fillStyle = "whitesmoke";
+      this.ctx.fill();
+
     } else if (this.rewinding) {
       // Done rotating the block, drop it & rewind it
       this.ctx.beginPath();
@@ -130,13 +142,21 @@ View.prototype.renderBlock = function() {
       this.ctx.rect( ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), this.block.y(), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
-    } else {
-      // Done rotating the block, drop it & rewind it
+
+    } else if (this.rewindingRotation ) {
+      // Done growing the block, now rotating
+
+      this.ctx.save();
+
       this.ctx.beginPath();
-      const blockY = this.blockY ? this.blockY : (this.block.y());
-      this.ctx.rect( ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), blockY, this.block.size, this.block.size );
+      this.ctx.translate( ( this.block.x() + ( this.block.size / 2 ) ), ( this.block.y() + ( this.block.size / 2 ) ) );
+      this.ctx.rotate( ( 45 - this.block.rotation) * Math.PI / 180);
+      this.ctx.rect( ( 0 - ( this.block.size / 2) - this.block.movementY), ( 0 - ( this.block.size / 2 )), this.block.size, this.block.size );
+      // this.ctx.rect( (  (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2 ) + this.block.movementY), this.block.size, this.block.size );
       this.ctx.fillStyle = "whitesmoke";
       this.ctx.fill();
+
+      this.ctx.restore();
     }
   }
 };
@@ -180,6 +200,19 @@ View.prototype.rotateBlock = function(modifier) {
   }
 };
 
+View.prototype.unrotateBlock = function(modifier) {
+  // Rotate that block
+  this.block.rotation -= 125 * modifier;
+
+  if ( this.block.rotation <= 0 && this.rewindingRotation === true ) {
+    // Block is fully rotated
+    this.block.rotation = 0;
+    this.rewindingRotation = false;
+    // Is this being called?
+    this.setInitialState();
+  }
+};
+
 View.prototype.dropBlock = function( modifier ) {
   if ( this.block.movementY < this.canvas.offsetHeight ) {
     this.block.drop(modifier);
@@ -201,6 +234,11 @@ View.prototype.rewindBlock = function(modifier) {
 
   if (this.block.size < 25) {
     this.block.size = 25;
+  }
+
+  if (this.block.size === 25 && this.block.movementY === 0) {
+    this.rewinding = false;
+    this.rewindingRotation = true;
   }
 };
 
@@ -293,7 +331,7 @@ View.prototype.checkCollisions = function() {
 
 View.prototype.checkOutOfBounds = function() {
   // If the block is out of bounds, restart
-  if (this.block.movementY >= this.canvas.offsetHeight) {
+  if (this.block.y() >= this.canvas.offsetHeight) {
     this.showResultsAndReset();
   }
 };
@@ -307,16 +345,26 @@ View.prototype.wallCollision = function(modifier) {
 View.prototype.showResultsAndReset = function() {
   this.displayingResults = true;
   if (this.initializing === false) {
-    window.setTimeout(() => {this.rewinding = true;}, 1000);
-    window.setTimeout(this.setInitialState.bind(this), 2000);
+    // 1 second pause, then rewind
+    window.setTimeout(this.initializeRewind.bind(this), 1000);
     this.initializing = true;
   }
+};
+
+View.prototype.initializeRewind = function() {
+  this.rewinding = true;
+  this.droppingBlock = false;
+  this.displayingResults = false;
+  this.backgroundColor = this.randomBackground();
 };
 
 View.prototype.setInitialState = function() {
   if (this.userClicked === false) {
     return;
   }
+
+    console.log('setInitialState')
+
 
   /* GAME REFERENCES */
   this.game.reset();
@@ -326,17 +374,17 @@ View.prototype.setInitialState = function() {
   this.displayingInstructions = true;
   this.mouseDown = false;
   this.userClicked = false;
-  this.displayingResults = false;
   this.rotatingBlock = false;
-  this.initializing = false;
   this.droppingBlock = false;
+  this.displayingResults = false;
   this.rewinding = false;
+  this.rewindingRotation = false;
+  this.initializing = false;
 
   /* GAME ANIMATION VALUES */
   this.blockY = undefined;
   this.rockingDirection = "outwards";
   this.rockingModifier = 0;
-  this.backgroundColor = this.randomBackground();
   this.lowerGap = this.game.lowerGap;
   this.upperGap = this.game.upperGap;
   // Delay and rewind up block
