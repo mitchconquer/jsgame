@@ -13,6 +13,8 @@ function View(game, canvas) {
   /* EVENT LISTENERS */
   this.canvas.addEventListener('mousedown', () => { this.mouseDown = true; });
   this.canvas.addEventListener('mouseup', () => { this.mouseDown = false; });
+  this.canvas.addEventListener('touchstart', () => { this.mouseDown = true; });
+  this.canvas.addEventListener('touchend', () => { this.mouseDown = false; });
   
   this.game.setWidth(this.canvas.width);
   this.then = Date.now();

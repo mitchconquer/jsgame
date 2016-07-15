@@ -305,6 +305,12 @@
 	  this.canvas.addEventListener('mouseup', function () {
 	    _this.mouseDown = false;
 	  });
+	  this.canvas.addEventListener('touchstart', function () {
+	    _this.mouseDown = true;
+	  });
+	  this.canvas.addEventListener('touchend', function () {
+	    _this.mouseDown = false;
+	  });
 	
 	  this.game.setWidth(this.canvas.width);
 	  this.then = Date.now();
