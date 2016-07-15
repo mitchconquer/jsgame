@@ -28,7 +28,6 @@ Game.prototype.setWidth = function(newWidth) {
   if (newWidth) {
     this.width = newWidth;
     return this.width;
-    console.log('Game#width = called ' + newWidth);
   }
   return this.width;
 };
@@ -45,7 +44,6 @@ Game.prototype.gameLoop = function() {
 };
 
 Game.prototype.setupRound = function(levelNumber) {
-  console.log('Game#setupRound');
   /* Level data */
   this.level = 1;
   this.maxUpperGap = 280;
@@ -78,11 +76,9 @@ Game.prototype.checkResults = function() {
 
   if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
     this.roundsWon += 1;
-    console.log('Round Won!');
     this.won = true;
   } else {
     this.roundsLost += 1;
-    console.log('Round Lost :(');
   }
 
   // Restart the game loop

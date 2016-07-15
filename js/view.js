@@ -11,8 +11,8 @@ function View(game, canvas) {
   this.setInitialState();
 
   /* EVENT LISTENERS */
-  this.canvas.addEventListener('mousedown', () => { this.mouseDown = true;console.log('this.mouseDown = true');});
-  this.canvas.addEventListener('mouseup', () => { this.mouseDown = false; console.log('this.mouseDown = false');});
+  this.canvas.addEventListener('mousedown', () => { this.mouseDown = true; });
+  this.canvas.addEventListener('mouseup', () => { this.mouseDown = false; });
   
   this.game.setWidth(this.canvas.width);
   this.then = Date.now();
@@ -180,7 +180,6 @@ View.prototype.displayInstructions = function() {
 };
 
 View.prototype.displayResults = function() {
-  console.log('display results');
   if (this.game.won) {
     this.ctx.font = "35px Kanit";
     this.ctx.textAlign = "center";
@@ -267,7 +266,6 @@ View.prototype.setInitialState = function() {
   this.lowerGap = this.game.lowerGap;
   this.upperGap = this.game.upperGap;
   // Delay and rewind up block
-  console.log('finished setInitialState();')
 
 };
 

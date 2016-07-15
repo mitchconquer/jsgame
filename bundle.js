@@ -50,7 +50,7 @@
 	    Canvas = __webpack_require__(6),
 	    View = __webpack_require__(7);
 	
-	$(function () {
+	document.addEventListener('DOMContentLoaded', function () {
 	  var canvas = new Canvas();
 	  var game = new Game(canvas.canvas.offsetWidth);
 	  var view = new View(game, canvas);
@@ -98,7 +98,6 @@
 	  if (newWidth) {
 	    this.width = newWidth;
 	    return this.width;
-	    console.log('Game#width = called ' + newWidth);
 	  }
 	  return this.width;
 	};
@@ -115,7 +114,6 @@
 	};
 	
 	Game.prototype.setupRound = function (levelNumber) {
-	  console.log('Game#setupRound');
 	  /* Level data */
 	  this.level = 1;
 	  this.maxUpperGap = 280;
@@ -148,11 +146,9 @@
 	
 	  if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
 	    this.roundsWon += 1;
-	    console.log('Round Won!');
 	    this.won = true;
 	  } else {
 	    this.roundsLost += 1;
-	    console.log('Round Lost :(');
 	  }
 	
 	  // Restart the game loop
@@ -277,7 +273,7 @@
 	};
 	
 	Canvas.prototype.resizeCanvas = function () {
-	  $(this.canvas).attr('width', $(this.container).width());
+	  this.canvas.setAttribute('width', document.getElementById('container').offsetWidth);
 	};
 	
 	module.exports = Canvas;
@@ -304,10 +300,10 @@
 	
 	  /* EVENT LISTENERS */
 	  this.canvas.addEventListener('mousedown', function () {
-	    _this.mouseDown = true;console.log('this.mouseDown = true');
+	    _this.mouseDown = true;
 	  });
 	  this.canvas.addEventListener('mouseup', function () {
-	    _this.mouseDown = false;console.log('this.mouseDown = false');
+	    _this.mouseDown = false;
 	  });
 	
 	  this.game.setWidth(this.canvas.width);
@@ -470,7 +466,6 @@
 	};
 	
 	View.prototype.displayResults = function () {
-	  console.log('display results');
 	  if (this.game.won) {
 	    this.ctx.font = "35px Kanit";
 	    this.ctx.textAlign = "center";
@@ -552,7 +547,6 @@
 	  this.lowerGap = this.game.lowerGap;
 	  this.upperGap = this.game.upperGap;
 	  // Delay and rewind up block
-	  console.log('finished setInitialState();');
 	};
 	
 	module.exports = View;

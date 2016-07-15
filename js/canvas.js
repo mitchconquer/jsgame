@@ -11,7 +11,7 @@ Canvas.prototype.init = function() {
 };
 
 Canvas.prototype.resizeCanvas = function() {
-  $(this.canvas).attr('width', $(this.container).width());
+  this.canvas.setAttribute('width', document.getElementById('container').offsetWidth);
 };
 
 module.exports = Canvas;
