@@ -1,0 +1,105 @@
+h3 {
+    font-family: sans-serif;
+    font-weight: 200;
+    text-align: center;
+    width: 50%;
+    min-width: 300px;
+    display: block;
+    margin: 10px auto;
+}
+
+body {
+	text-align: center;
+	overflow: hidden;
+}
+
+/* Button */
+
+#clear {
+	font-family: sans-serif;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 200;
+	text-decoration: none;
+	padding: 10px 50px;
+	background-color: salmon;
+	border-radius: 10px;
+	margin: 10px;	
+	display: inline-block;
+	border: 2px solid white;
+	transition: all .15s;
+	-webkit-transition: all .15s;
+}
+
+#destruction {
+	font-family: sans-serif;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 200;
+	text-decoration: none;
+	padding: 10px 50px;
+	background-color: salmon;
+	border-radius: 10px;
+	margin: 10px;	
+	display: inline-block;
+	border: 2px solid white;
+	transition: all .15s;
+	-webkit-transition: all .15s;
+}
+
+#destruction:hover {
+	background-color: #fff;
+	color: salmon;
+	border: 2px solid salmon;
+}
+
+#destruction.activated {
+	background-color: #fff;
+	color: salmon;
+	border: 2px solid salmon;
+}
+
+#destruction.activated:hover {
+	background-color: salmon;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+
+#clear:hover {
+	background-color: #fff;
+	color: salmon;
+	border: 2px solid salmon;
+}
+
+/* Grid */
+#grid {
+	max-width: 600px;
+	width: 100%;
+	display: block;
+	margin: 10px auto;
+	font-size: 0;
+}
+
+/* Pixels */
+
+.pixel {
+	margin: 1px;
+	display: inline-block;
+	background-color: cadetblue;
+	display: flex;
+	float:left;
+	position: relative;
+	top:0;
+	left:0;
+    -webkit-transition: top .25s ease, left .25s ease;
+    transition: top .25s ease, left .25s ease;
+}
+
+.active {
+	background-color: salmon;
+}
+
+.transition-location {
+	
+}
