@@ -72,6 +72,9 @@ View.prototype.render = function() {
 
   this.renderBlock();
   this.renderWalls();
+  if (this.displayingResults) {
+    this.displayResults();
+  }
 };
 
 /* RENDER HELPERS */
@@ -152,7 +155,7 @@ View.prototype.rotateBlock = function(modifier) {
     this.block.rotation = 45;
     this.rotatingBlock = false;
     this.droppingBlock = true;
-    this.game.checkBlockSize();
+    this.game.checkResults();
   }
 };
 
@@ -162,12 +165,18 @@ View.prototype.dropBlock = function( modifier ) {
   }
 };
 
-View.prototype.wallCollision = function(modifier) {
-  // Stop the block
-  this.block.stop(modifier);
-  if (this.initializing === false) {
-    window.setTimeout(this.setInitialState.bind(this), 1000);
-    this.initializing = true;
+View.prototype.displayResults = function() {
+  console.log('display results');
+  if (this.game.won) {
+      this.ctx.font = "35px Open Sans";
+      this.ctx.textAlign = "center";
+      this.ctx.fillText("YAASSSS, QUEEN!", (this.canvas.offsetWidth / 2), 100);
+      this.ctx.fillText("YOU SLAYED!", (this.canvas.offsetWidth / 2), 150);
+  } else {
+    this.ctx.font = "35px Open Sans";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText("NO, NO, NO.", (this.canvas.offsetWidth / 2), 100);
+    this.ctx.fillText("SASHAY AWAY.", (this.canvas.offsetWidth / 2), 150);
   }
 };
 
@@ -204,7 +213,21 @@ View.prototype.checkCollisions = function() {
 View.prototype.checkOutOfBounds = function() {
   // If the block is out of bounds, restart
   if (this.block.movementY >= 700) {
-    this.setInitialState();
+    this.showResultsAndReset();
+  }
+};
+
+View.prototype.wallCollision = function(modifier) {
+  // Stop the block
+  this.block.stop(modifier);
+  this.showResultsAndReset();
+};
+
+View.prototype.showResultsAndReset = function() {
+  this.displayingResults = true;
+  if (this.initializing === false) {
+    window.setTimeout(this.setInitialState.bind(this), 1000);
+    this.initializing = true;
   }
 };
 
@@ -213,8 +236,10 @@ View.prototype.setInitialState = function() {
     return;
   }
   console.log('called setInitialState();')
+  this.game.reset();
   this.mouseDown = false;
   this.userClicked = false;
+  this.displayingResults = false;
   this.rotatingBlock = false;
   this.initializing = false;
   this.droppingBlock = false;

@@ -6,6 +6,7 @@ const LevelConstants = require('./level_constants'),
 
 function Game(width = 300, height = 580) {
   this.gameOver = false;
+  this.won = false;
   this.width = width;
   this.height = height;
   this.roundsWon = 0;
@@ -53,6 +54,7 @@ Game.prototype.setupRound = function(levelNumber) {
 
   /* Round state */
   // this.roundIsSetup = false;
+  this.won = false;
   this.upperGap = 0;
   this.lowerGap = 0;
   this.upperGap = this.randGap();
@@ -71,12 +73,13 @@ Game.prototype.growBlock = function(modifier) {
   this.block.grow(modifier);
 };
 
-Game.prototype.checkBlockSize = function() {
+Game.prototype.checkResults = function() {
   // this.roundIsSetup = false;
 
   if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
     this.roundsWon += 1;
     console.log('Round Won!');
+    this.won = true;
   } else {
     this.roundsLost += 1;
     console.log('Round Lost :(');
@@ -84,8 +87,11 @@ Game.prototype.checkBlockSize = function() {
 
   // Restart the game loop
   // Reset initial start values
-  this.gameLoop();
 
+};
+
+Game.prototype.reset = function() {
+  this.gameLoop();
 };
 
 /* GAME UTILS */

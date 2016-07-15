@@ -76,6 +76,7 @@
 	  var height = arguments.length <= 1 || arguments[1] === undefined ? 580 : arguments[1];
 	
 	  this.gameOver = false;
+	  this.won = false;
 	  this.width = width;
 	  this.height = height;
 	  this.roundsWon = 0;
@@ -123,6 +124,7 @@
 	
 	  /* Round state */
 	  // this.roundIsSetup = false;
+	  this.won = false;
 	  this.upperGap = 0;
 	  this.lowerGap = 0;
 	  this.upperGap = this.randGap();
@@ -141,12 +143,13 @@
 	  this.block.grow(modifier);
 	};
 	
-	Game.prototype.checkBlockSize = function () {
+	Game.prototype.checkResults = function () {
 	  // this.roundIsSetup = false;
 	
 	  if (this.block.size > this.lowerGap && this.block.size < this.upperGap) {
 	    this.roundsWon += 1;
 	    console.log('Round Won!');
+	    this.won = true;
 	  } else {
 	    this.roundsLost += 1;
 	    console.log('Round Lost :(');
@@ -154,6 +157,9 @@
 	
 	  // Restart the game loop
 	  // Reset initial start values
+	};
+	
+	Game.prototype.reset = function () {
 	  this.gameLoop();
 	};
 	
@@ -356,6 +362,9 @@
 	
 	  this.renderBlock();
 	  this.renderWalls();
+	  if (this.displayingResults) {
+	    this.displayResults();
+	  }
 	};
 	
 	/* RENDER HELPERS */
@@ -435,7 +444,7 @@
 	    this.block.rotation = 45;
 	    this.rotatingBlock = false;
 	    this.droppingBlock = true;
-	    this.game.checkBlockSize();
+	    this.game.checkResults();
 	  }
 	};
 	
@@ -445,12 +454,18 @@
 	  }
 	};
 	
-	View.prototype.wallCollision = function (modifier) {
-	  // Stop the block
-	  this.block.stop(modifier);
-	  if (this.initializing === false) {
-	    window.setTimeout(this.setInitialState.bind(this), 1000);
-	    this.initializing = true;
+	View.prototype.displayResults = function () {
+	  console.log('display results');
+	  if (this.game.won) {
+	    this.ctx.font = "35px Open Sans";
+	    this.ctx.textAlign = "center";
+	    this.ctx.fillText("YAASSSS, QUEEN!", this.canvas.offsetWidth / 2, 100);
+	    this.ctx.fillText("YOU SLAYED!", this.canvas.offsetWidth / 2, 150);
+	  } else {
+	    this.ctx.font = "35px Open Sans";
+	    this.ctx.textAlign = "center";
+	    this.ctx.fillText("NO, NO, NO.", this.canvas.offsetWidth / 2, 100);
+	    this.ctx.fillText("SASHAY AWAY.", this.canvas.offsetWidth / 2, 150);
 	  }
 	};
 	
@@ -482,7 +497,21 @@
 	View.prototype.checkOutOfBounds = function () {
 	  // If the block is out of bounds, restart
 	  if (this.block.movementY >= 700) {
-	    this.setInitialState();
+	    this.showResultsAndReset();
+	  }
+	};
+	
+	View.prototype.wallCollision = function (modifier) {
+	  // Stop the block
+	  this.block.stop(modifier);
+	  this.showResultsAndReset();
+	};
+	
+	View.prototype.showResultsAndReset = function () {
+	  this.displayingResults = true;
+	  if (this.initializing === false) {
+	    window.setTimeout(this.setInitialState.bind(this), 1000);
+	    this.initializing = true;
 	  }
 	};
 	
@@ -491,8 +520,10 @@
 	    return;
 	  }
 	  console.log('called setInitialState();');
+	  this.game.reset();
 	  this.mouseDown = false;
 	  this.userClicked = false;
+	  this.displayingResults = false;
 	  this.rotatingBlock = false;
 	  this.initializing = false;
 	  this.droppingBlock = false;
