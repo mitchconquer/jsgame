@@ -57,6 +57,9 @@ Game.prototype.setupRound = function(levelNumber) {
   this.lowerGap = 0;
   this.upperGap = this.randGap();
   this.lowerGap = this.upperGap - this.randLedge();
+  if (this.lowerGap < 30) {
+    this.setupRound();
+  }
   this.block = new Block(this.width);
   this.upperWall = new UpperWall(this.upperGap, this.width);
   this.lowerWall = new LowerWall(this.lowerGap, this.width);

@@ -127,6 +127,9 @@
 	  this.lowerGap = 0;
 	  this.upperGap = this.randGap();
 	  this.lowerGap = this.upperGap - this.randLedge();
+	  if (this.lowerGap < 30) {
+	    this.setupRound();
+	  }
 	  this.block = new Block(this.width);
 	  this.upperWall = new UpperWall(this.upperGap, this.width);
 	  this.lowerWall = new LowerWall(this.lowerGap, this.width);
@@ -196,23 +199,28 @@
 	
 	  this.size = 25;
 	  this.sizeIncrement = 300;
-	  this.velocityY = 2000;
+	  this.velocityY = 1700;
 	  this.movementY = 0;
 	  this.x = function () {
-	    return canvasWidth / 2 - _this.size / 2 + _this.movementY;
+	    return canvasWidth / 2 - _this.size / 2;
 	  };
 	  this.y = function () {
-	    return 70 - _this.size / 2;
+	    return 70 - _this.size / 2 + _this.movementY;
 	  };
 	  this.rotation = 0;
 	}
 	
 	Block.prototype.grow = function (modifier) {
-	  this.size += this.sizeIncrement * modifier;
+	  this.size += Math.floor(this.sizeIncrement * modifier);
+	  this.velocityY = 1700;
 	};
 	
 	Block.prototype.drop = function (modifier) {
 	  this.movementY += modifier * this.velocityY;
+	};
+	
+	Block.prototype.stop = function (modifier) {
+	  this.velocityY = 0;
 	};
 	
 	module.exports = Block;
@@ -367,18 +375,26 @@
 	      this.ctx.fill();
 	
 	      this.ctx.restore();
-	    } else {
+	    } else if (this.block.rotation < 45) {
 	      // Done growing the block, now rotating
 	      this.ctx.save();
 	
 	      this.ctx.beginPath();
 	      this.ctx.translate(this.block.x() + this.block.size / 2, this.block.y() + this.block.size / 2);
 	      this.ctx.rotate((45 - this.block.rotation) * Math.PI / 180);
-	      this.ctx.rect(0 - this.block.size / 2 - this.block.movementY, 0 - this.block.size / 2 + this.block.movementY, this.block.size, this.block.size);
+	      this.ctx.rect(0 - this.block.size / 2 - this.block.movementY, 0 - this.block.size / 2, this.block.size, this.block.size);
+	      // this.ctx.rect( (  (this.canvas.offsetWidth / 2) - ( this.block.size / 2) ), ( (this.canvas.offsetWidth / 2) - ( this.block.size / 2 ) + this.block.movementY), this.block.size, this.block.size );
 	      this.ctx.fillStyle = "whitesmoke";
 	      this.ctx.fill();
 	
 	      this.ctx.restore();
+	    } else {
+	      // Done rotating the block, drop it
+	      this.ctx.beginPath();
+	      var blockY = this.blockY ? this.blockY : this.block.y();
+	      this.ctx.rect(this.canvas.offsetWidth / 2 - this.block.size / 2, blockY, this.block.size, this.block.size);
+	      this.ctx.fillStyle = "whitesmoke";
+	      this.ctx.fill();
 	    }
 	  }
 	};
@@ -429,6 +445,15 @@
 	  }
 	};
 	
+	View.prototype.wallCollision = function (modifier) {
+	  // Stop the block
+	  this.block.stop(modifier);
+	  if (this.initializing === false) {
+	    window.setTimeout(this.setInitialState.bind(this), 1000);
+	    this.initializing = true;
+	  }
+	};
+	
 	/* UTILITY METHODS */
 	View.prototype.randomBackground = function () {
 	  return this.backgroundColors[Math.floor(Math.random(this.backgroundColors.length) * this.backgroundColors.length)];
@@ -437,6 +462,17 @@
 	View.prototype.checkCollisions = function () {
 	  // If the block collides with any wall, stop it.
 	
+	  if (this.block.size > this.upperGap) {
+	    // Check for collision with upper wall
+	    var topOfWall = this.canvas.offsetHeight - 80;
+	    if (this.droppingBlock === true && this.block.y() + this.block.size >= topOfWall) {
+	      this.blockY = 500 - this.block.size;
+	      console.log(this.block.y() + this.block.size - topOfWall);
+	      this.wallCollision();
+	    }
+	  } else if (this.block.size > this.lowerGap) {
+	    // Check for collision with lower wall
+	  }
 	};
 	
 	View.prototype.checkOutOfBounds = function () {
@@ -447,15 +483,22 @@
 	};
 	
 	View.prototype.setInitialState = function () {
+	  if (this.userClicked === false) {
+	    return;
+	  }
+	  console.log('called setInitialState();');
 	  this.mouseDown = false;
 	  this.userClicked = false;
 	  this.rotatingBlock = false;
+	  this.initializing = false;
 	  this.droppingBlock = false;
+	  this.blockY = undefined;
 	  this.backgroundColor = this.randomBackground();
 	  this.block = this.game.block;
 	  this.lowerGap = this.game.lowerGap;
 	  this.upperGap = this.game.upperGap;
 	  // Delay and rewind up block
+	  console.log('finished setInitialState();');
 	};
 	
 	module.exports = View;
