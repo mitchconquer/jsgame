@@ -120,7 +120,7 @@
 	  this.level = 1;
 	  this.maxUpperGap = 280;
 	  this.minUpperGap = 35;
-	  this.ledgeRange = [20, 100];
+	  this.ledgeRange = [10, 80];
 	
 	  /* Round state */
 	  // this.roundIsSetup = false;
@@ -205,7 +205,7 @@
 	
 	  this.size = 25;
 	  this.sizeIncrement = 300;
-	  this.velocityY = 1700;
+	  this.velocityY = 400;
 	  this.movementY = 0;
 	  this.x = function () {
 	    return canvasWidth / 2 - _this.size / 2;
@@ -218,10 +218,11 @@
 	
 	Block.prototype.grow = function (modifier) {
 	  this.size += Math.floor(this.sizeIncrement * modifier);
-	  this.velocityY = 1700;
+	  this.velocityY = 400;
 	};
 	
 	Block.prototype.drop = function (modifier) {
+	  this.velocityY += this.velocityY * 0.1;
 	  this.movementY += modifier * this.velocityY;
 	};
 	

@@ -50,7 +50,7 @@ Game.prototype.setupRound = function(levelNumber) {
   this.level = 1;
   this.maxUpperGap = 280;
   this.minUpperGap = 35;
-  this.ledgeRange = [20, 100];
+  this.ledgeRange = [10, 80];
 
   /* Round state */
   // this.roundIsSetup = false;
