@@ -329,7 +329,7 @@
 	};
 	
 	View.prototype.update = function (modifier) {
-	  if (this.mouseDown) {
+	  if (this.mouseDown && this.rotatingBlock === false && this.droppingBlock === false) {
 	    this.game.growBlock(modifier);
 	    this.userClicked = true;
 	  }
