@@ -1,3 +1,14 @@
+body {
+  text-align: center;
+  background-color: #222;
+}
+
+h1 {
+  font-family: "Kanit";
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+
 #wrapper {
   text-align: center;
 }
