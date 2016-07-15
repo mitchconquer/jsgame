@@ -167,7 +167,7 @@ View.prototype.rotateBlock = function(modifier) {
 };
 
 View.prototype.dropBlock = function( modifier ) {
-  if ( this.block.movementY < 700 ) {
+  if ( this.block.movementY < this.canvas.offsetHeight ) {
     this.block.drop(modifier);
   }
 };
@@ -224,14 +224,14 @@ View.prototype.checkCollisions = function() {
     // Check for collision with upper wall
     const topOfWall = this.canvas.offsetHeight - 80;
     if ( this.droppingBlock === true && (this.block.y() + this.block.size ) >= topOfWall ) {
-      this.blockY = 500 - this.block.size;
+      this.blockY = topOfWall - this.block.size;
       this.wallCollision();
     }
   } else if ( this.block.size > this.lowerGap ) {
     // Check for collision with lower wall
     const topOfWall = this.canvas.offsetHeight - 50;
     if ( this.droppingBlock === true && (this.block.y() + this.block.size ) >= topOfWall ) {
-      this.blockY = 530 - this.block.size;
+      this.blockY = topOfWall - this.block.size;
       this.wallCollision();
     }
   }
@@ -240,7 +240,7 @@ View.prototype.checkCollisions = function() {
 
 View.prototype.checkOutOfBounds = function() {
   // If the block is out of bounds, restart
-  if (this.block.movementY >= 700) {
+  if (this.block.movementY >= this.canvas.offsetHeight) {
     this.showResultsAndReset();
   }
 };

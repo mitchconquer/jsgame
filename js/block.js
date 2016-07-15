@@ -14,7 +14,7 @@ Block.prototype.grow = function(modifier) {
 };
 
 Block.prototype.drop = function(modifier) {
-  this.velocityY += this.velocityY * 0.1;
+  this.velocityY += this.velocityY * 0.2;
   this.movementY += modifier * this.velocityY;
 };
 
