@@ -469,6 +469,15 @@
 	  this.ctx.strokeStyle = "rgba( 255, 255, 255, 0.7)";
 	  this.ctx.fillText("CLICK AND HOLD TO GROW", this.canvas.offsetWidth / 2, 130);
 	  this.ctx.fillText("RELEASE TO DROP", this.canvas.offsetWidth / 2, 160);
+	
+	  // Done rotating the block, drop it
+	  var exampleSize = this.upperGap - 10;
+	  var exampleX = this.canvas.offsetWidth / 2 - exampleSize / 2;
+	  var exampleY = this.canvas.offsetHeight - 50 - exampleSize;
+	  this.ctx.beginPath();
+	  this.ctx.rect(exampleX, exampleY, exampleSize, exampleSize);
+	  this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+	  this.ctx.fill();
 	};
 	
 	View.prototype.displayResults = function () {
