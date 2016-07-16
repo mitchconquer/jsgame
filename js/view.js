@@ -355,7 +355,6 @@ View.prototype.showResultsAndReset = function() {
 View.prototype.initializeRewind = function() {
   this.rewinding = true;
   this.droppingBlock = false;
-  this.displayingResults = false;
   this.backgroundColor = this.randomBackground();
 };
 
