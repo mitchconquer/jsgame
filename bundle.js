@@ -321,7 +321,7 @@
 	  this.ctx = canvas.ctx;
 	  this.game = game;
 	  this.block = this.game.block;
-	  this.backgroundColors = ['#3D504C', '#C63020', '#202332'];
+	  this.backgroundColors = ['#2E0927', '#FF2D00', '#FF8C00', '#04756F'];
 	  this.backgroundColor = this.randomBackground();
 	
 	  this.setInitialState();
@@ -533,8 +533,6 @@
 	};
 	
 	View.prototype.rewindBlock = function (modifier) {
-	  console.log(this.block.movementY);
-	  console.log(this.block.velocityY);
 	
 	  if (this.block.y() > 58.5) {
 	    this.block.rewind(modifier);
@@ -582,15 +580,15 @@
 	    this.ctx.textAlign = "center";
 	    this.ctx.fillStyle = "rgba( 255, 255, 255, 0.7)";
 	    this.ctx.strokeStyle = "rgba( 255, 255, 255, 0.7)";
-	    this.ctx.fillText("YAAS, QUEEN!", this.canvas.offsetWidth / 2, 100);
-	    this.ctx.fillText("YOU SLAYED!", this.canvas.offsetWidth / 2, 130);
+	    this.ctx.fillText("YAAS, QUEEN!", this.canvas.offsetWidth / 2, 130);
+	    this.ctx.fillText("YOU SLAYED!", this.canvas.offsetWidth / 2, 160);
 	  } else {
 	    this.ctx.font = "35px Kanit";
 	    this.ctx.textAlign = "center";
 	    this.ctx.fillStyle = "rgba( 255, 255, 255, 0.7)";
 	    this.ctx.strokeStyle = "rgba( 255, 255, 255, 0.7)";
-	    this.ctx.fillText("OH NO!", this.canvas.offsetWidth / 2, 100);
-	    this.ctx.fillText("SASHAY AWAY.", this.canvas.offsetWidth / 2, 130);
+	    this.ctx.fillText("OH NO!", this.canvas.offsetWidth / 2, 130);
+	    this.ctx.fillText("SASHAY AWAY.", this.canvas.offsetWidth / 2, 160);
 	  }
 	};
 	
@@ -673,8 +671,6 @@
 	  if (this.userClicked === false) {
 	    return;
 	  }
-	
-	  console.log('setInitialState');
 	
 	  /* GAME REFERENCES */
 	  this.game.reset();
