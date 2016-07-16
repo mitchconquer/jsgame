@@ -220,9 +220,9 @@
 	
 	Block.prototype.shrink = function (modifier) {
 	  if (this.size > 300) {
-	    this.size -= Math.floor(this.sizeIncrement * (this.size * .15) * modifier);
+	    this.size -= Math.floor(this.sizeIncrement * (this.size * .05) * modifier);
 	  } else if (this.size > 150) {
-	    this.size -= Math.floor(this.sizeIncrement * (this.size * .1) * modifier);
+	    this.size -= Math.floor(this.sizeIncrement * (this.size * .02) * modifier);
 	  } else {
 	    this.size -= Math.floor(this.sizeIncrement * (this.size * .02) * modifier);
 	  }
