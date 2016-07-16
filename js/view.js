@@ -220,6 +220,9 @@ View.prototype.dropBlock = function( modifier ) {
 };
 
 View.prototype.rewindBlock = function(modifier) {
+  console.log(this.block.movementY);
+  console.log(this.block.velocityY);
+  
   if ( this.block.y() > 58.5 ) {
     this.block.rewind(modifier)
   }
