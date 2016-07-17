@@ -570,7 +570,7 @@
 	  var exampleY = this.canvas.offsetHeight - 50 - exampleSize;
 	  this.ctx.beginPath();
 	  this.ctx.rect(exampleX, exampleY, exampleSize, exampleSize);
-	  this.ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+	  this.ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
 	  this.ctx.fill();
 	};
 	
